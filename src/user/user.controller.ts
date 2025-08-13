@@ -1,60 +1,50 @@
 import {
   Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
+  // Get,
+  // Post,
+  // Patch,
+  // Delete,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiBody,
-  ApiParam,
-  ApiOperation,
-} from '@nestjs/swagger';
+// import {
+//   ApiTags,
+//   ApiBody,
+//   ApiParam,
+//   ApiOperation,
+//   ApiQuery,
+// } from '@nestjs/swagger';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationDto } from '../common';
 
-@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiBody({ type: CreateUserDto })
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  @MessagePattern({ cmd: 'create_user' })
+  create(@Payload() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @ApiOperation({ summary: 'Get all users' })
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @MessagePattern({ cmd: 'find_all' })
+  findAll(@Payload() paginationDto: PaginationDto) {
+    console.log('Pagination DTO:', paginationDto);
+    return this.userService.findAll(paginationDto);
   }
 
-  @ApiOperation({ summary: 'Get a user by ID' })
-  @ApiParam({ name: 'id', type: 'string' })
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'find_user' })
+  findOne(@Payload('id') id: string) {
     return this.userService.findOne(id);
   }
 
-  @ApiOperation({ summary: 'Update a user by ID' })
-  @ApiParam({ name: 'id', type: 'string' })
-  @ApiBody({ type: UpdateUserDto })
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  @MessagePattern({ cmd: 'update_user' })
+  update(@Payload() updateUserDto: UpdateUserDto) {
+    return this.userService.update(updateUserDto);
   }
 
-  @ApiOperation({ summary: 'Delete a user by ID' })
-  @ApiParam({ name: 'id', type: 'string' })
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'delete_user' })
+  remove(@Payload('id') id: string) {
     return this.userService.remove(id);
   }
 }
