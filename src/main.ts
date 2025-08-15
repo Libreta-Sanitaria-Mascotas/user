@@ -19,13 +19,13 @@ async function bootstrap() {
     },
   );
   //app.setGlobalPrefix('api');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     transform: true,
+  //     whitelist: true,
+  //     forbidNonWhitelisted: true,
+  //   }),
+  // );
   // const config = new DocumentBuilder()
   //   .setTitle('User Service')
   //   .setDescription('User Service API')

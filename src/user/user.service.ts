@@ -16,7 +16,7 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
-    return this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
   async findAll(paginationDto: PaginationDto): Promise<PageResult<User>> {
