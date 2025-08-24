@@ -37,6 +37,10 @@ export class UserController {
   findOne(@Payload('id') id: string) {
     return this.userService.findOne(id);
   }
+  @MessagePattern({ cmd: 'find_user_by_credential_id' })
+  findByCredentialId(@Payload('credentialId') credentialId: string) {
+    return this.userService.findByCredentialId(credentialId);
+  }
 
   @MessagePattern({ cmd: 'update_user' })
   update(@Payload() updateUserDto: UpdateUserDto) {

@@ -39,6 +39,10 @@ export class UserService {
     return this.userRepository.findOneBy({ id });
   }
 
+  async findByCredentialId(credentialId: string) {
+    return this.userRepository.findOneBy({ credentialId });
+  }
+
   async update(updateUserDto: UpdateUserDto) {
     const { id, ...data } = updateUserDto;
     if (!id) {
