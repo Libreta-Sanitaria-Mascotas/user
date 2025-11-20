@@ -58,6 +58,11 @@ export class UserService {
     });
   }
 
+  async validate(id: string): Promise<{ exists: boolean }> {
+    const user = await this.userRepository.findOneBy({ id });
+    return { exists: !!user };
+  }
+
   async remove(id: string) {
     return this.userRepository.delete(id);
   }

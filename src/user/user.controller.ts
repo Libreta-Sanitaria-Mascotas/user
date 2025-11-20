@@ -37,6 +37,7 @@ export class UserController {
   findOne(@Payload('id') id: string) {
     return this.userService.findOne(id);
   }
+  
   @MessagePattern({ cmd: 'find_user_by_credential_id' })
   findByCredentialId(@Payload('credentialId') credentialId: string) {
     return this.userService.findByCredentialId(credentialId);
@@ -45,6 +46,11 @@ export class UserController {
   @MessagePattern({ cmd: 'update_user' })
   update(@Payload() updateUserDto: UpdateUserDto) {
     return this.userService.update(updateUserDto);
+  }
+
+  @MessagePattern({ cmd: 'validate_user' })
+  validate(@Payload('id') id: string) {
+    return this.userService.validate(id);
   }
 
   @MessagePattern({ cmd: 'delete_user' })
