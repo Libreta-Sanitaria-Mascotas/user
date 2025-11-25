@@ -16,6 +16,9 @@ export class User {
 
     @Column({ name: 'last_name', nullable: true })
     lastName: string;
+
+    @Column({ name: 'avatar_url', nullable: true })
+    avatarUrl: string;
   
     @CreateDateColumn()
     created_at: Date;
