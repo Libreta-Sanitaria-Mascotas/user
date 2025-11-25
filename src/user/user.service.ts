@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { PaginationDto } from 'src/common';
 import { PageResult } from 'src/common/interface/pageResult.interface';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UserService {
@@ -22,17 +23,20 @@ export class UserService {
   async findAll(paginationDto: PaginationDto): Promise<PageResult<User>> {
     const { page = 1, limit = 10 } = paginationDto;
     const skip = (page - 1) * limit;
-    const users = await this.userRepository.find({
+    const [users, totalItems] = await this.userRepository.findAndCount({
       skip,
       take: limit,
     });
-    const meta = {
-      page,
-      limit,
-      totalItems: await this.userRepository.count(),
-      totalPages: Math.ceil((await this.userRepository.count()) / limit),
+    const totalPages = Math.ceil(totalItems / limit) || 1;
+    return {
+      data: users,
+      meta: {
+        page,
+        limit,
+        totalItems,
+        totalPages,
+      },
     };
-    return { data: users, meta };
   }
 
   async findOne(id: string) {
@@ -46,11 +50,17 @@ export class UserService {
   async update(updateUserDto: UpdateUserDto) {
     const { id, ...data } = updateUserDto;
     if (!id) {
-      throw new Error('ID is required for update');
+      throw new RpcException({
+        statusCode: 400,
+        message: 'ID is required for update',
+      });
     }
     const userFound = await this.findOne(id);
     if (!userFound) {
-      throw new Error('User not found');
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found',
+      });
     }
     return this.userRepository.save({
       ...userFound,
@@ -64,6 +74,13 @@ export class UserService {
   }
 
   async remove(id: string) {
+    const userFound = await this.findOne(id);
+    if (!userFound) {
+      throw new RpcException({
+        statusCode: 404,
+        message: 'User not found',
+      });
+    }
     return this.userRepository.delete(id);
   }
 }

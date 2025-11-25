@@ -14,5 +14,9 @@ export const envValidationSchema = Joi.object({
 
     JWT_SECRET: Joi.string().required(),
     JWT_EXPIRES_IN: Joi.string().required().default('1h'),
+    JWT_EXPIRES_IN_REFRESH: Joi.string().required().default('7d'),
+
+    RABBITMQ_URL: Joi.string().default('amqp://admin:admin123@rabbitmq:5672'),
+    RABBITMQ_QUEUE: Joi.string().default('user_queue'),
 
 }).unknown(true);

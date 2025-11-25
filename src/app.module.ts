@@ -7,11 +7,11 @@ import { envs } from './config';
   imports: [UserModule,
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
-       const { db } = envs;
+       const { db, nodeEnv } = envs;
         return {
           ...db,
           entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
-          synchronize: true,
+          synchronize: nodeEnv === 'development',
         }; 
       },
     }),
