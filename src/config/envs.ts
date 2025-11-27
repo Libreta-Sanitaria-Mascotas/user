@@ -11,6 +11,7 @@ interface EnvVars {
   DB_PASSWORD: string;
   DB_NAME: string;
   DB_TYPE: 'postgres' | 'mysql' | 'mariadb' | 'sqlite';
+  LOG_LEVEL: string;
   REDIS_HOST: string;
   REDIS_PORT: number;
   JWT_SECRET: string;
@@ -30,6 +31,7 @@ const envVars: EnvVars = value;
 
 export const envs = {
   nodeEnv: envVars.NODE_ENV,
+  logLevel: envVars.LOG_LEVEL,
   port: envVars.PORT,
   db: {
     host: envVars.DB_HOST,

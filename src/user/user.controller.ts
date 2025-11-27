@@ -29,7 +29,6 @@ export class UserController {
 
   @MessagePattern({ cmd: 'find_all' })
   findAll(@Payload() paginationDto: PaginationDto) {
-    console.log('Pagination DTO:', paginationDto);
     return this.userService.findAll(paginationDto);
   }
 

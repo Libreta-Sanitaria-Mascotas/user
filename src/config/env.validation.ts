@@ -11,12 +11,15 @@ export const envValidationSchema = Joi.object({
     DB_PASSWORD: Joi.string().required(),
     DB_NAME: Joi.string().required(),
     DB_TYPE: Joi.string().valid('postgres', 'mysql', 'mariadb', 'sqlite').required(),
+    LOG_LEVEL: Joi.string()
+      .valid('error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly')
+      .default('debug'),
 
     JWT_SECRET: Joi.string().required(),
-    JWT_EXPIRES_IN: Joi.string().required().default('1h'),
-    JWT_EXPIRES_IN_REFRESH: Joi.string().required().default('7d'),
+    JWT_EXPIRES_IN: Joi.string().required(),
+    JWT_EXPIRES_IN_REFRESH: Joi.string().required(),
 
-    RABBITMQ_URL: Joi.string().default('amqp://admin:admin123@rabbitmq:5672'),
-    RABBITMQ_QUEUE: Joi.string().default('user_queue'),
+    RABBITMQ_URL: Joi.string().required(),
+    RABBITMQ_QUEUE: Joi.string().required(),
 
 }).unknown(true);
