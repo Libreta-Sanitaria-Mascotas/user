@@ -15,11 +15,13 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  /** Crea un usuario a partir del DTO recibido. */
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
     return await this.userRepository.save(user);
   }
 
+  /** Lista usuarios con paginación básica. */
   async findAll(paginationDto: PaginationDto): Promise<PageResult<User>> {
     const { page = 1, limit = 10 } = paginationDto;
     const skip = (page - 1) * limit;
@@ -39,14 +41,17 @@ export class UserService {
     };
   }
 
+  /** Busca usuario por ID. */
   async findOne(id: string) {
     return this.userRepository.findOneBy({ id });
   }
 
+  /** Busca usuario por credentialId (para gateway/auth). */
   async findByCredentialId(credentialId: string) {
     return this.userRepository.findOneBy({ credentialId });
   }
 
+  /** Actualiza datos de usuario (requiere id). */
   async update(updateUserDto: UpdateUserDto) {
     const { id, ...data } = updateUserDto;
     if (!id) {
@@ -68,11 +73,13 @@ export class UserService {
     });
   }
 
+  /** Verifica si el usuario existe (uso cruzado). */
   async validate(id: string): Promise<{ exists: boolean }> {
     const user = await this.userRepository.findOneBy({ id });
     return { exists: !!user };
   }
 
+  /** Elimina usuario por ID. */
   async remove(id: string) {
     const userFound = await this.findOne(id);
     if (!userFound) {
